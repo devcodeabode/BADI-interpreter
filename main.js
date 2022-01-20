@@ -10,14 +10,22 @@ const tokenize = (text) =>
     })
     .flat();
 
+const tok = (text) => {
+  const operators = '+-*&^%$!@<>{}[]()/?;:'.split('');
+  let token;
+  for (let i = 0; i < text.length; ++i) {
+
+  }
+}
 
 const main = (() => {
-    const data = `for ((counter=10; counter>0; counter--))
-    do 
-    echo -n "$counter "
-    #This is a comment
-    done
-    printf "\\n"`;
+    const data = `function hello {
+      echo "Hello $1"
+      echo "Got $# args"
+    }
+    hello "World" "again"`;
 
     console.log(tokenize(data));
 })();
+
+module.exports = { tokenize } // for testing
