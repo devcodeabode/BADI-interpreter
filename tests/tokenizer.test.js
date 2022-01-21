@@ -1,6 +1,6 @@
-const tok = require('./main.js').tok;
+const tokenize = require('../src/tokenizer.js').tokenize;
 
-const tokenizerTests = [
+const tests = [
 [
 `echo "Hello, World!"`,
 '[{\"col\":0,\"line\":1,\"type\":\"Identifier\",\"value\":\"echo\"},{\"col\":4,\"line\":1,\"type\":\"Operator\",\"value\":\"\\\"Hello, World!\\\"\"}]'
@@ -65,8 +65,8 @@ echo "X is $x"`,
 ]
 ]
 
-for (const n of tokenizerTests) {
+for (const n of tests) {
   test(n[0], () => {
-    expect(JSON.stringify(tok(n[0]))).toEqual(n[1]);
+    expect(JSON.stringify(tokenize(n[0]))).toEqual(n[1]);
   });  
 }

@@ -1,22 +1,4 @@
 /**
- * Original tokenizer, used to get temporary test values
- * @deprecated
- * @param {String} text Input text to be tokenized 
- * @returns A list of tokens
- */
-const tokenize = (text) => 
-   `${text}\n`
-    .replace(/#(.*?)\n/g, "")
-    .match(/"(.*?)"|[^\s]+/g)
-    .map(t => {
-      return !t.includes('"') ?
-        t.replace(/(?!"(.*?)")(\+|-|\*|\/|=|'|\!|%|&|\||~|\?|:|;|<|>|\.|,|\{|\}|\(|\)|\[|\]|\^|\$)/g, ' $& ')
-        .match(/"(.*?)"|[^\s]+/g)
-        : t;
-    })
-    .flat();
-
-/**
  * Token class
  */
 class Token {
@@ -39,7 +21,7 @@ class Token {
  * @param {String} input Text to be tokenized
  * @returns List of tokens
  */
-const tok = (input) => {
+const tokenize = (input) => {
   // replaces tabs with spaces and new lines with \NEWLINE\
   input = input.replace(/\t/g, ' ').replace(/\n/g, ' \\NEWLINE\\ ');
   const operators = `+-*&^%$!@<>{"}[]()/?;:#@='`;
@@ -97,7 +79,6 @@ const tok = (input) => {
       token.value !== '' && tokens.push(token);
       token = new Token();
       j = i;
-      
     }
     ++col
     ++i;
@@ -114,7 +95,7 @@ const tok = (input) => {
 // }
 // hello "World" "again"`;
 
-//   console.log(tok(data));
+//   console.log(tokenize(data));
 // })();
 
-module.exports = { tokenize, tok } // for testing
+module.exports = { tokenize } // for testing
