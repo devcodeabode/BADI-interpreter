@@ -2,11 +2,11 @@
  * Token class
  */
 class Token {
-  constructor() {
-    this.col = 1;
-    this.line = 1;
-    this.type = undefined;
-    this.value = undefined;
+  constructor(col, line, type, value) {
+    this.col = col;
+    this.line = line;
+    this.type = type;
+    this.value = value;
   }
   /**
    * String format of Token
@@ -14,7 +14,6 @@ class Token {
    */
   toString() { return `<${this.type}::${this.value} ${this.line}:${this.col}>`; }
 }
-
 
 /**
  * The new and improved tokenizer
@@ -27,61 +26,54 @@ const tokenize = (input) => {
   const operators = `+-*&^%$!@<>{"}[]()/?;:#@='`;
 
   // Important values to determine token attributes
-  let line = 1;
+  let line = 1; 
   let col = 0;
-  let token = new Token();
-  let lastToken = undefined;
+  let token;
   let tokens = [];
-  // Pointer to current char
-  let i = 0;
-  // Pointer to beginning of token
-  let j = 0;
+  let cursor = 0; 
+  let tokenStart = 0;
 
   // Create the tokens
-  while (i < input.length) {
+  while (cursor < input.length) {
     // Dealing with operators & strings
-    if (operators.includes(input.slice(j, i))) {
+    if (operators.includes(input.slice(tokenStart, cursor))) {
       // If it's a string
-      if (input.slice(j, i).trim() === '"') {
-        // move to the end of the string
-        while (input[i] !== '"') {
+      if (input.slice(tokenStart, cursor).trim() === '"') {
+        while (input[cursor] !== '"') {
           ++col;
-          ++i;
+          ++cursor;
         }
         // Don't forget to include that quote!
-        ++i
+        ++cursor;
       }
-      token.value = input.slice(j, i);
-      token.col = token.col = col - token.value.length;
-      token.line = line;
-      token.type = 'Operator';
+      token = new Token(col - input.slice(tokenStart, cursor).length,
+        line,
+        'Operator',
+        input.slice(tokenStart, cursor))
       token.value.trim() !== '' && tokens.push(token);
-      token = new Token();
-      j = i;
+      tokenStart = cursor;
     }
 
     // Deal with non-operators & strings
-    if (operators.includes(input[i]) || input[i] === ' ') {
-      token.value = input.slice(j, i).trim();
-      token.col = col - token.value.length;
-      token.line = line;
-
+    if (operators.includes(input[cursor]) || input[cursor] === ' ') {
+      const value = input.slice(tokenStart, cursor).trim();
+      
+      token = new Token(col - value.length,
+        line,
+        !isNaN(parseFloat(value)) ? 'Number' : 'Identifier',
+        value)
+      
       if (token.value === '\\NEWLINE\\') {
         ++line;
         col = 0;
       }
 
-      if (!isNaN(parseFloat(token.value)))
-        token.type = 'Number'
-      else
-        token.type = 'Identifier'
       // Pushes token if it isn't whitespace
       token.value !== '' && tokens.push(token);
-      token = new Token();
-      j = i;
+      tokenStart = cursor;
     }
-    ++col
-    ++i;
+    ++col;
+    ++cursor;
   }
   tokens.map(t => t.value = t.value.trim())
   return tokens;
