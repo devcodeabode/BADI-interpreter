@@ -12,8 +12,12 @@ class Token {
    * String format of Token
    * @returns String format as: <type::value line:col>
    */
-  toString() { return `<${this.type}::${this.value} ${this.line}:${this.col}>`; }
+  toString() {
+    return `<${this.type}::${this.value} ${this.line}:${this.col}>`;
+  }
 }
+
+const parseOP = () => {};
 
 /**
  * The new and improved tokenizer
@@ -22,15 +26,14 @@ class Token {
  */
 const tokenize = (input) => {
   // replaces tabs with spaces and new lines with \NEWLINE\
-  input = input.replace(/\t/g, ' ').replace(/\n/g, ' \\NEWLINE\\ ');
+  input = input.replace(/\t/g, " ").replace(/\n/g, " \\NEWLINE\\ ");
   const operators = `+-*&^%$!@<>{"}[]()/?;:#@='`;
 
   // Important values to determine token attributes
-  let line = 1; 
+  let line = 1;
   let col = 0;
-  let token;
   let tokens = [];
-  let cursor = 0; 
+  let cursor = 0;
   let tokenStart = 0;
 
   // Create the tokens
@@ -46,41 +49,47 @@ const tokenize = (input) => {
         // Don't forget to include that quote!
         ++cursor;
       }
-      token = new Token(col - input.slice(tokenStart, cursor).length,
-        line,
-        'Operator',
-        input.slice(tokenStart, cursor))
-      token.value.trim() !== '' && tokens.push(token);
+
+      input.slice(tokenStart, cursor).trim() !== "" &&
+        tokens.push(
+          new Token(
+            col - input.slice(tokenStart, cursor).length,
+            line,
+            "Operator",
+            input.slice(tokenStart, cursor)
+          )
+        );
       tokenStart = cursor;
     }
 
     // Deal with non-operators & strings
-    if (operators.includes(input[cursor]) || input[cursor] === ' ') {
+    if (operators.includes(input[cursor]) || input[cursor] === " ") {
       const value = input.slice(tokenStart, cursor).trim();
-      
-      token = new Token(col - value.length,
+
+      const token = new Token(
+        col - value.length,
         line,
-        !isNaN(parseFloat(value)) ? 'Number' : 'Identifier',
-        value)
-      
-      if (token.value === '\\NEWLINE\\') {
+        !isNaN(parseFloat(value)) ? "Number" : "Identifier",
+        value
+      );
+
+      if (token.value === "\\NEWLINE\\") {
         ++line;
         col = 0;
       }
 
       // Pushes token if it isn't whitespace
-      token.value !== '' && tokens.push(token);
+      token.value !== "" && tokens.push(token);
       tokenStart = cursor;
     }
-    ++col;
-    ++cursor;
+    ++col, ++cursor;
   }
-  tokens.map(t => t.value = t.value.trim())
+  tokens.map((t) => (t.value = t.value.trim()));
   return tokens;
-}
+};
 
 // const main = (() => {
-//   const data = 
+//   const data =
 // `function hello {
 //   echo "Hello $1"
 //   echo "Got $# args"
@@ -90,4 +99,4 @@ const tokenize = (input) => {
 //   console.log(tokenize(data));
 // })();
 
-module.exports = { tokenize } // for testing
+module.exports = { tokenize }; // for testing

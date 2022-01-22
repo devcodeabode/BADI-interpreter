@@ -5,13 +5,15 @@
   "description": "The base interpreter for BADI-bot",
   "main": "main.js",
   "scripts": {
-    "test": "cd src/ && jest"
-    
+    "test": "cd src/ && jest",
+    "update": "make update",
+    "clean": "make clean"
   },
   "author": "Joshua Maxwell, Brandon Ingli",
   "license": "GPLv3",
   "dependencies": {
     "jest": "^27.4.7",
+    "prettier": "^2.5.1",
     "prompt-sync": "^4.1.6"
   }
 }
