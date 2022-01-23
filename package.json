@@ -10,7 +10,7 @@
     "clean": "make clean"
   },
   "author": "Joshua Maxwell, Brandon Ingli",
-  "license": "GPLv3",
+  "license": "AGPL-3.0",
   "dependencies": {
     "jest": "^27.4.7",
     "prettier": "^2.5.1",
