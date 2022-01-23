@@ -2,6 +2,13 @@
  * Token class
  */
 class Token {
+  /**
+   * Constructor for tokens
+   * @param {Integer} col The column number of the token's first char
+   * @param {String} line The line number of the token
+   * @param {String} type The token's datatype
+   * @param {String} value The value of the token
+   */
   constructor(col, line, type, value) {
     this.col = col;
     this.line = line;
@@ -16,8 +23,6 @@ class Token {
     return `<${this.type}::${this.value} ${this.line}:${this.col}>`;
   }
 }
-
-const parseOP = () => {};
 
 /**
  * The new and improved tokenizer
@@ -50,7 +55,7 @@ const tokenize = (input) => {
         ++cursor;
       }
 
-      input.slice(tokenStart, cursor).trim() !== "" &&
+      if (input.slice(tokenStart, cursor).trim() !== "")
         tokens.push(
           new Token(
             col - input.slice(tokenStart, cursor).length,
@@ -59,6 +64,7 @@ const tokenize = (input) => {
             input.slice(tokenStart, cursor)
           )
         );
+      
       tokenStart = cursor;
     }
 
@@ -79,7 +85,7 @@ const tokenize = (input) => {
       }
 
       // Pushes token if it isn't whitespace
-      token.value !== "" && tokens.push(token);
+      if (token.value !== "") tokens.push(token);
       tokenStart = cursor;
     }
     ++col, ++cursor;
@@ -88,15 +94,4 @@ const tokenize = (input) => {
   return tokens;
 };
 
-// const main = (() => {
-//   const data =
-// `function hello {
-//   echo "Hello $1"
-//   echo "Got $# args"
-// }
-// hello "World" "again"`;
-
-//   console.log(tokenize(data));
-// })();
-
-module.exports = { tokenize }; // for testing
+module.exports = { tokenize }; 
