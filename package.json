@@ -15,5 +15,6 @@
     "jest": "^27.4.7",
     "prettier": "^2.5.1",
     "prompt-sync": "^4.1.6"
-  }
+  },
+  "prettier": {}
 }
