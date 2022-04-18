@@ -5,6 +5,7 @@
 
 **Related bugs/feature requests**
 <!-- e.g. Resolves #2 -->
+<!-- e.g. Resolves BADI-bot/BADI-bot#23 -->
 <!-- New bullet point for each issue if there's more than one. -->
 + Resolves  
 
